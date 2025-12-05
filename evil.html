@@ -27,7 +27,7 @@
         }
 
         try {
-          const ws = new WebSocket("ws://web:8080/admin/ws");
+          const ws = new WebSocket("wss://web:8080/admin/ws");
           ws.onopen = function () {
             ws.send("flag");
           };
